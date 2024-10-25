@@ -8,7 +8,7 @@ pub struct Parser {
 }
 
 type Clause = Vec<i32>;
-type Formula = Vec<Clause>;
+pub type Formula = Vec<Clause>;
 
 #[derive(Debug)]
 pub struct Problem {
