@@ -7,7 +7,13 @@ pub struct Parser {
     input_file: String,
 }
 
-type Clause = Vec<i32>;
+#[derive(Clone, Debug)]
+pub enum Variable {
+    Literal(usize),
+    NegLiteral(usize),
+}
+
+type Clause = Vec<Variable>;
 pub type Formula = Vec<Clause>;
 
 #[derive(Debug)]
@@ -61,8 +67,13 @@ impl Parser {
                 if lit == 0 {
                     curr_clause += 1;
                     break;
+                } else {
+                    if lit > 0 {
+                        formula[curr_clause].push(Variable::Literal(lit as usize));
+                    } else {
+                        formula[curr_clause].push(Variable::NegLiteral((-lit) as usize));
+                    }
                 }
-                formula[curr_clause].push(lit);
             }
         }
 
