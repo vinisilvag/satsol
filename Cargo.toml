@@ -1,0 +1,11 @@
+[package]
+name = "satsol"
+version = "0.1.0"
+edition = "2021"
+authors = [
+  "Vinicius Gomes <vinisilvag@ufmg.br>",
+]
+description = "A CLI tool to solve SAT instances in the DIMACS format."
+
+[dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
