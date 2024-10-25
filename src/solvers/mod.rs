@@ -5,7 +5,7 @@ pub mod brute;
 pub type Model = Vec<Option<bool>>;
 
 #[derive(Debug)]
-pub enum Solution {
+pub enum Satisfiability {
     Sat(Model),
     Unsat,
 }

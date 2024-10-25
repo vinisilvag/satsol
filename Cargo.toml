@@ -9,3 +9,4 @@ description = "A CLI tool to solve SAT instances in the DIMACS format."
 
 [dependencies]
 clap = { version = "4.5.20", features = ["derive"] }
+thiserror = "1.0.65"

@@ -1,11 +1,11 @@
 use crate::{
     parser::Problem,
-    solvers::{assign_truth_value, check_sat, check_unsat_clause, Solution},
+    solvers::{assign_truth_value, check_sat, check_unsat_clause, Satisfiability},
 };
 
 use super::Model;
 
-pub fn solve_brute(problem: &Problem) -> Solution {
+pub fn solve_brute(problem: &Problem) -> Satisfiability {
     fn solve_rec(problem: &Problem, model: Model) -> Option<Model> {
         if check_sat(&problem.formula, &model) {
             return Some(model);
@@ -32,7 +32,7 @@ pub fn solve_brute(problem: &Problem) -> Solution {
 
     let model = vec![None; problem.variables_num];
     match solve_rec(problem, model) {
-        Some(model) => Solution::Sat(model),
-        None => Solution::Unsat,
+        Some(model) => Satisfiability::Sat(model),
+        None => Satisfiability::Unsat,
     }
 }

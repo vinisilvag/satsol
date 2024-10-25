@@ -5,7 +5,7 @@ mod solvers;
 use args::{Args, Solver};
 use clap::Parser as ClapParser;
 use parser::Parser as InputParser;
-use solvers::{brute, Model, Solution};
+use solvers::{brute, Model, Satisfiability};
 
 fn show_assignment(model: Model) {
     for (i, assignment) in model.iter().enumerate() {
@@ -17,7 +17,7 @@ fn show_assignment(model: Model) {
 
 fn main() {
     let Args { solver, input_file } = Args::parse();
-    let parser = InputParser::new(input_file);
+    let mut parser = InputParser::new(input_file);
     let problem = parser.parse().unwrap();
 
     let solution = match solver {
@@ -28,12 +28,12 @@ fn main() {
     };
 
     match solution {
-        Solution::Sat(model) => {
+        Satisfiability::Sat(model) => {
             println!("model:");
             show_assignment(model);
             println!("\nsat");
         }
-        Solution::Unsat => {
+        Satisfiability::Unsat => {
             println!("unsat")
         }
     }
