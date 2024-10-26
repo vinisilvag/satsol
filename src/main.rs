@@ -18,7 +18,10 @@ fn show_assignment(model: Model) {
 fn main() {
     let Args { solver, input_file } = Args::parse();
     let mut parser = InputParser::new(input_file);
-    let problem = parser.parse().unwrap();
+    let problem = match parser.parse() {
+        Ok(problem) => problem,
+        Err(error) => panic!("{error}"),
+    };
 
     let solution = match solver {
         Solver::Brute => brute::solve_brute(&problem),

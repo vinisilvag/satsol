@@ -10,7 +10,4 @@ pub enum ParserError {
 
     #[error("clause readed before header")]
     ClauseBeforeHeader,
-
-    #[error("an unknown occurred")]
-    Unknown,
 }

@@ -16,17 +16,18 @@ pub fn solve_brute(problem: &Problem) -> Satisfiability {
 
         let choice = model.iter().position(|x| x.is_none())?;
 
-        let left = solve_rec(
+        let assign_false = solve_rec(
             problem,
             assign_truth_value(model.clone(), choice as usize, false),
         );
-        if left.is_some() {
-            left
+        if assign_false.is_some() {
+            assign_false
         } else {
-            solve_rec(
+            let assign_true = solve_rec(
                 problem,
                 assign_truth_value(model.clone(), choice as usize, true),
-            )
+            );
+            assign_true
         }
     }
 

@@ -21,12 +21,10 @@ pub type Formula = Vec<Clause>;
 #[derive(Debug)]
 pub struct Problem {
     pub variables_num: usize,
-    pub clauses_num: usize,
     pub formula: Formula,
 }
 
 pub struct Parser {
-    input_file: String,
     lexer: Lexer,
 }
 
@@ -35,21 +33,21 @@ impl Parser {
         let file = File::open(&input_file).unwrap();
         let reader = io::BufReader::new(file);
         let lexer = Lexer::new(reader);
-        Parser { input_file, lexer }
+        Parser { lexer }
     }
 
     pub fn parse(&mut self) -> Result<Problem, ParserError> {
         let mut header_readed = false;
         let mut variables_num = 0;
-        let mut clauses_num = 0;
         let mut formula: Formula = Vec::new();
+        let mut curr_clause: usize = 0;
 
         loop {
             let line = self.lexer.read_line()?;
             match line {
-                Line::Header(_, variables, clauses) => {
+                Line::Header(variables, clauses) => {
                     variables_num = variables;
-                    clauses_num = clauses;
+                    formula.resize(clauses, vec![]);
                     header_readed = true;
                 }
                 Line::Clause(variables) => {
@@ -67,7 +65,8 @@ impl Parser {
                             }
                         })
                         .collect();
-                    formula.push(formatted);
+                    formula[curr_clause] = formatted;
+                    curr_clause += 1;
                 }
                 Line::End => {
                     break;
@@ -77,7 +76,6 @@ impl Parser {
 
         Ok(Problem {
             variables_num,
-            clauses_num,
             formula,
         })
     }

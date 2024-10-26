@@ -7,7 +7,7 @@ use super::error::ParserError;
 
 #[derive(Debug)]
 pub enum Line {
-    Header(String, usize, usize),
+    Header(usize, usize),
     Clause(Vec<i32>),
     End,
 }
@@ -38,14 +38,13 @@ impl Lexer {
                 if trimmed.starts_with("p") {
                     let parts: Vec<&str> = trimmed.split(" ").collect();
                     let filtered: Vec<&&str> = parts.iter().filter(|&&x| x != "").collect();
-                    let [typ, format, variables, clauses] = filtered[..] else {
+                    let [_, format, variables, clauses] = filtered[..] else {
                         return Err(ParserError::HeaderPoorlyFormatted);
                     };
                     if format.to_owned() != "cnf" {
                         return Err(ParserError::InputFormatNotSupported(format.to_string()));
                     }
                     return Ok(Line::Header(
-                        typ.to_string(),
                         variables.parse::<usize>().unwrap(),
                         clauses.parse::<usize>().unwrap(),
                     ));
