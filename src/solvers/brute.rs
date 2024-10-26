@@ -16,19 +16,18 @@ pub fn solve_brute(problem: &Problem) -> Satisfiability {
 
         let choice = model.iter().position(|x| x.is_none())?;
 
-        let assign_false = solve_rec(
+        // tries to assign false first
+        // if fail, tries true
+        solve_rec(
             problem,
             assign_truth_value(model.clone(), choice as usize, false),
-        );
-        if assign_false.is_some() {
-            assign_false
-        } else {
-            let assign_true = solve_rec(
+        )
+        .or_else(|| {
+            solve_rec(
                 problem,
                 assign_truth_value(model.clone(), choice as usize, true),
-            );
-            assign_true
-        }
+            )
+        })
     }
 
     let model = vec![None; problem.variables_num];
