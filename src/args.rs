@@ -3,8 +3,8 @@ use clap::Parser;
 #[derive(Debug, clap::ValueEnum, Clone)]
 pub enum Solver {
     Brute,
-    DPLL,
-    CDCL,
+    Dpll,
+    Cdcl,
 }
 
 #[derive(Parser, Debug)]

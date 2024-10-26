@@ -59,9 +59,9 @@ impl Parser {
                         .iter()
                         .map(|&x| {
                             if x > 0 {
-                                Variable::Literal(x as usize)
+                                Variable::Literal((x - 1) as usize)
                             } else {
-                                Variable::NegLiteral((-x) as usize)
+                                Variable::NegLiteral(((-x) - 1) as usize)
                             }
                         })
                         .collect();

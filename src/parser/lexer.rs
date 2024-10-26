@@ -26,7 +26,7 @@ impl Lexer {
             let mut buf = String::new();
             self.reader.read_line(&mut buf).unwrap();
 
-            if buf != "" {
+            if !buf.is_empty() {
                 let trimmed = buf.trim();
                 if trimmed.starts_with("c") || trimmed.starts_with("%") {
                     continue;
@@ -37,11 +37,11 @@ impl Lexer {
 
                 if trimmed.starts_with("p") {
                     let parts: Vec<&str> = trimmed.split(" ").collect();
-                    let filtered: Vec<&&str> = parts.iter().filter(|&&x| x != "").collect();
+                    let filtered: Vec<&&str> = parts.iter().filter(|&&x| !x.is_empty()).collect();
                     let [_, format, variables, clauses] = filtered[..] else {
                         return Err(ParserError::HeaderPoorlyFormatted);
                     };
-                    if format.to_owned() != "cnf" {
+                    if *format != "cnf" {
                         return Err(ParserError::InputFormatNotSupported(format.to_string()));
                     }
                     return Ok(Line::Header(
@@ -50,7 +50,7 @@ impl Lexer {
                     ));
                 } else {
                     let parts: Vec<&str> = trimmed.split(" ").collect();
-                    let filtered: Vec<&&str> = parts.iter().filter(|&&x| x != "").collect();
+                    let filtered: Vec<&&str> = parts.iter().filter(|&&x| !x.is_empty()).collect();
                     let parsed: Vec<i32> = filtered
                         .iter()
                         .map(|x| x.parse::<i32>().unwrap())

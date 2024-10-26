@@ -5,7 +5,8 @@ mod solvers;
 use args::{Args, Solver};
 use clap::Parser as ClapParser;
 use parser::Parser as InputParser;
-use solvers::{brute, Model, Satisfiability};
+use solvers::{brute, dpll, Model, Satisfiability};
+use std::time::{Duration, Instant};
 
 fn show_assignment(model: Model) {
     for (i, assignment) in model.iter().enumerate() {
@@ -23,12 +24,15 @@ fn main() {
         Err(error) => panic!("{error}"),
     };
 
+    let start: Instant = Instant::now();
     let solution = match solver {
         Solver::Brute => brute::solve_brute(&problem),
+        Solver::Dpll => dpll::solve_dpll(&problem),
         _ => {
-            todo!("{:?} solver not implemented", solver)
+            todo!("{:?} solver", solver)
         }
     };
+    let duration: Duration = start.elapsed();
 
     match solution {
         Satisfiability::Sat(model) => {
@@ -40,4 +44,5 @@ fn main() {
             println!("unsat")
         }
     }
+    println!("time elapsed: {:?}", duration);
 }

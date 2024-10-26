@@ -1,9 +1,7 @@
 use crate::{
     parser::Problem,
-    solvers::{assign_truth_value, check_sat, check_unsat_clause, Satisfiability},
+    solvers::{assign_truth_value, check_sat, check_unsat_clause, Model, Satisfiability},
 };
-
-use super::Model;
 
 pub fn solve_brute(problem: &Problem) -> Satisfiability {
     fn solve_rec(problem: &Problem, model: Model) -> Option<Model> {
@@ -20,17 +18,17 @@ pub fn solve_brute(problem: &Problem) -> Satisfiability {
         // if fail, tries true
         solve_rec(
             problem,
-            assign_truth_value(model.clone(), choice as usize, false),
+            assign_truth_value(model.clone(), choice, false).unwrap(),
         )
         .or_else(|| {
             solve_rec(
                 problem,
-                assign_truth_value(model.clone(), choice as usize, true),
+                assign_truth_value(model.clone(), choice, true).unwrap(),
             )
         })
     }
 
-    let model = vec![None; problem.variables_num];
+    let model: Model = vec![None; problem.variables_num];
     match solve_rec(problem, model) {
         Some(model) => Satisfiability::Sat(model),
         None => Satisfiability::Unsat,
